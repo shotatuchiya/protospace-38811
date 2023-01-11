@@ -1,5 +1,6 @@
 class PrototypesController < ApplicationController
   before_action :set_prototype, only: [:edit, :show]
+  before_action :move_to_new, except: [:index, :show, :new, :create]
   before_action :move_to_index, except: [:index, :show, :new, :create]
   before_action :authenticate_user!, except: [:index, :show]
 
@@ -51,6 +52,13 @@ class PrototypesController < ApplicationController
 
   def set_prototype
     @prototype = Prototype.find(params[:id])
+  end
+
+  def move_to_new
+    @prototype =  Prototype.find(params[:id])
+    unless user_signed_in?
+      redirect_to action: :new
+    end
   end
 
   def move_to_index
